@@ -15,6 +15,8 @@ class InternshipOffersTest extends TestCase
         $response->assertSee('Passer au mode sombre');
         $response->assertSee('offre-20', false);
         $response->assertDontSee('offre-21', false);
+        $response->assertDontSee('Compatibilité avec votre CV');
+        $response->assertDontSee('Meilleure compatibilité');
         $response->assertSee('Postuler');
     }
 
