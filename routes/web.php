@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttributionController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeesController;
@@ -41,6 +42,10 @@ Route::post('/offres-stage/{offer}/postuler', [InternshipApplicationController::
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/admin/dashboard', AdminDashboardController::class)
+    ->middleware(['auth', 'admin'])
+    ->name('admin.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/mes-candidatures', [InternshipApplicationController::class, 'index'])->name('applications.index');
