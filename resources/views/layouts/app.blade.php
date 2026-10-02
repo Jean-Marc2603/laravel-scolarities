@@ -95,10 +95,14 @@
                     <span x-show="!sidebarCollapsed" x-transition.opacity>Entreprises</span>
                 </a>
 
-                <a href="#" aria-disabled="true" title="Cette page n'est pas encore disponible" @click.prevent
-                    class="group flex cursor-not-allowed items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-500 transition"
+                <a href="{{ route('applications.index') }}" @click="mobileSidebarOpen = false" @class([
+                    'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition',
+                    'bg-indigo-50 text-indigo-700' => request()->routeIs('applications.*'),
+                    'text-gray-600 hover:bg-gray-100 hover:text-gray-900' => !request()->routeIs('applications.*'),
+                ])
                     :class="sidebarCollapsed ? 'md:justify-center md:px-0' : ''"
-                    :title="sidebarCollapsed ? 'Mes candidatures' : 'Cette page n’est pas encore disponible'">
+                    :title="sidebarCollapsed ? 'Mes candidatures' : ''" @if (request()->routeIs('applications.*'))
+                    aria-current="page" @endif>
                     <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="1.8" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round"

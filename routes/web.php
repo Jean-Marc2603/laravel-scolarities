@@ -5,6 +5,7 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeesController;
 use App\Http\Controllers\InternshipOfferController;
+use App\Http\Controllers\InternshipApplicationController;
 use App\Http\Controllers\LevelsController;
 use App\Http\Controllers\NiveauController;
 use App\Http\Controllers\ParentController;
@@ -33,12 +34,19 @@ Route::get('/', function () {
 });
 
 Route::get('/offres-stage', [InternshipOfferController::class, 'index'])->name('internships.index');
+Route::post('/offres-stage/{offer}/postuler', [InternshipApplicationController::class, 'store'])
+    ->middleware('auth')
+    ->name('internships.apply');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/mes-candidatures', [InternshipApplicationController::class, 'index'])->name('applications.index');
+    Route::get('/mes-candidatures/{application}', [InternshipApplicationController::class, 'show'])->name('applications.show');
+    Route::delete('/mes-candidatures/{application}', [InternshipApplicationController::class, 'destroy'])->name('applications.destroy');
+
     Route::get('/mon-cv', [CvController::class, 'index'])->name('cv.index');
     Route::post('/mon-cv', [CvController::class, 'store'])->name('cv.store');
     Route::get('/mon-cv/telecharger', [CvController::class, 'download'])->name('cv.download');
