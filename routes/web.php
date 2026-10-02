@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttributionController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeesController;
@@ -46,6 +47,12 @@ Route::get('/dashboard', function () {
 Route::get('/admin/dashboard', AdminDashboardController::class)
     ->middleware(['auth', 'admin'])
     ->name('admin.dashboard');
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('student-accounts/{user}/edit', [AdminStudentController::class, 'editAccount'])->name('students.accounts.edit');
+    Route::put('student-accounts/{user}', [AdminStudentController::class, 'updateAccount'])->name('students.accounts.update');
+    Route::resource('students', AdminStudentController::class);
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/mes-candidatures', [InternshipApplicationController::class, 'index'])->name('applications.index');

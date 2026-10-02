@@ -27,22 +27,29 @@
                     <span>Vue d’ensemble</span>
                 </a>
                 <div class="hidden border-t border-slate-100 pt-3 lg:block">
-                    <p class="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Gestion à venir</p>
+                    <p class="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Gestion</p>
                 </div>
                 @foreach ([
-                    ['Utilisateurs', 'users'],
-                    ['Étudiants', 'students'],
-                    ['Entreprises', 'companies'],
-                    ['Offres', 'offers'],
-                    ['Candidatures', 'applications'],
-                    ['Stages', 'internships'],
-                    ['Frais de scolarité', 'fees'],
-                ] as [$label, $key])
-                    <a href="#{{ $key }}" aria-disabled="true" title="Cette section sera disponible prochainement" class="flex shrink-0 cursor-not-allowed items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition hover:bg-slate-50 hover:text-slate-700">
-                        <span class="flex h-5 w-5 items-center justify-center rounded-md border border-slate-200 text-[10px] font-bold text-slate-400">{{ mb_substr($label, 0, 1) }}</span>
-                        <span>{{ $label }}</span>
-                        <span class="ml-auto hidden rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-400 lg:inline">À venir</span>
-                    </a>
+                    ['Utilisateurs', 'users', null],
+                    ['Étudiants', 'students', route('admin.students.index')],
+                    ['Entreprises', 'companies', null],
+                    ['Offres', 'offers', null],
+                    ['Candidatures', 'applications', null],
+                    ['Stages', 'internships', null],
+                    ['Frais de scolarité', 'fees', null],
+                ] as [$label, $key, $href])
+                    @if ($href)
+                        <a href="{{ $href }}" @if (request()->routeIs('admin.students.*')) aria-current="page" @endif class="flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-50">
+                            <span class="flex h-5 w-5 items-center justify-center rounded-md border border-indigo-200 text-[10px] font-bold text-indigo-600">{{ mb_substr($label, 0, 1) }}</span>
+                            <span>{{ $label }}</span>
+                        </a>
+                    @else
+                        <a href="#{{ $key }}" aria-disabled="true" title="Cette section sera disponible prochainement" class="flex shrink-0 cursor-not-allowed items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition hover:bg-slate-50 hover:text-slate-700">
+                            <span class="flex h-5 w-5 items-center justify-center rounded-md border border-slate-200 text-[10px] font-bold text-slate-400">{{ mb_substr($label, 0, 1) }}</span>
+                            <span>{{ $label }}</span>
+                            <span class="ml-auto hidden rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-400 lg:inline">À venir</span>
+                        </a>
+                    @endif
                 @endforeach
             </nav>
 
@@ -150,19 +157,27 @@
                     </div>
                     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         @foreach ([
-                            ['Utilisateurs', 'user'],
-                            ['Étudiants', 'student'],
-                            ['Entreprises', 'company'],
-                            ['Offres', 'offer'],
-                            ['Candidatures', 'application'],
-                            ['Stages', 'internship'],
-                            ['Frais de scolarité', 'fees'],
-                        ] as [$label, $icon])
-                            <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                            ['Utilisateurs', 'user', null],
+                            ['Étudiants', 'student', route('admin.students.index')],
+                            ['Entreprises', 'company', null],
+                            ['Offres', 'offer', null],
+                            ['Candidatures', 'application', null],
+                            ['Stages', 'internship', null],
+                            ['Frais de scolarité', 'fees', null],
+                        ] as [$label, $icon, $href])
+                            @if ($href)
+                                <a href="{{ $href }}" class="flex items-center gap-3 rounded-xl border border-indigo-100 bg-white p-4 shadow-sm transition hover:border-indigo-300 hover:shadow-md">
+                                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-sm font-bold text-indigo-600">{{ mb_strtoupper(mb_substr($label, 0, 1)) }}</span>
+                                    <span class="min-w-0 flex-1 text-sm font-semibold text-slate-800">{{ $label }}</span>
+                                    <span class="text-xs font-semibold text-indigo-600">Ouvrir</span>
+                                </a>
+                            @else
+                                <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                                 <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-sm font-bold text-slate-600">{{ mb_strtoupper(mb_substr($label, 0, 1)) }}</span>
                                 <span class="min-w-0 flex-1 text-sm font-semibold text-slate-800">{{ $label }}</span>
                                 <span class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-500">À venir</span>
-                            </div>
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                 </section>
