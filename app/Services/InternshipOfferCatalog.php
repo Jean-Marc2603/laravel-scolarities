@@ -2,12 +2,29 @@
 
 namespace App\Services;
 
+use App\Models\InternshipOffer;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class InternshipOfferCatalog
 {
     /** @return array<int, array<string, mixed>> */
-    public function all(): array
+    public function all(bool $includeInactive = false): array
+    {
+        if (Schema::hasTable('internship_offers') && InternshipOffer::exists()) {
+            $query = InternshipOffer::query()->orderBy('id');
+            if (! $includeInactive) {
+                $query->where('is_active', true);
+            }
+
+            return $query->get()->map(fn (InternshipOffer $offer) => $this->toArray($offer))->all();
+        }
+
+        return $this->defaults();
+    }
+
+    /** @return array<int, array<string, mixed>> */
+    public function defaults(): array
     {
         $offers = [
             ['title' => 'Développeur Web Laravel', 'company' => 'Tech Solutions', 'domain' => 'Développement web', 'location' => 'Antananarivo', 'duration' => '3 mois', 'description' => 'Participez à la conception d’applications web et à l’amélioration de services numériques utilisés au quotidien.', 'skills' => ['Laravel', 'PHP', 'MySQL', 'Git'], 'days' => 18, 'details' => 'Vous contribuerez au développement de nouvelles fonctionnalités, à la correction de bugs et aux revues de code avec une équipe expérimentée.'],
@@ -52,5 +69,23 @@ class InternshipOfferCatalog
         }
 
         return null;
+    }
+
+    /** @return array<string, mixed> */
+    private function toArray(InternshipOffer $offer): array
+    {
+        return [
+            'id' => $offer->slug,
+            'title' => $offer->title,
+            'company' => $offer->company,
+            'domain' => $offer->domain,
+            'location' => $offer->location,
+            'duration' => $offer->duration,
+            'description' => $offer->description,
+            'skills' => $offer->skills ?? [],
+            'deadline' => $offer->deadline,
+            'details' => $offer->details,
+            'is_active' => $offer->is_active,
+        ];
     }
 }

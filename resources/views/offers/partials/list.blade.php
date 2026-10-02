@@ -25,11 +25,11 @@
                 <span class="inline-flex items-center gap-2"><svg class="h-4 w-4 text-indigo-300" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m5 12 4 4L19 6" />
-                    </svg>Offres dans 10 domaines</span>
+                    </svg>Opportunités de stage</span>
                 <span class="inline-flex items-center gap-2"><svg class="h-4 w-4 text-indigo-300" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m5 12 4 4L19 6" />
-                    </svg>Candidature bientôt disponible</span>
+                    </svg>Postulez directement depuis votre espace</span>
             </div>
         </div>
     </section>

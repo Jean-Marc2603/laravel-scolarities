@@ -2,6 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\InternshipOffer;
+use App\Services\InternshipOfferCatalog;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class InternshipOffersTest extends TestCase
@@ -41,5 +45,49 @@ class InternshipOffersTest extends TestCase
         $response->assertSee('Assistant marketing digital');
         $response->assertSee('Stagiaire SEO et contenu');
         $response->assertDontSee('Développeur Web Laravel');
+    }
+
+    public function test_student_list_reads_managed_active_offers_from_database(): void
+    {
+        Schema::create('internship_offers', function (Blueprint $table) {
+            $table->id();
+            $table->string('slug')->unique();
+            $table->string('title');
+            $table->string('company');
+            $table->string('domain');
+            $table->string('location');
+            $table->string('duration');
+            $table->text('description');
+            $table->json('skills');
+            $table->date('deadline');
+            $table->text('details');
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
+        foreach (app(InternshipOfferCatalog::class)->defaults() as $offer) {
+            InternshipOffer::create([
+                'slug' => $offer['id'],
+                'title' => $offer['title'],
+                'company' => $offer['company'],
+                'domain' => $offer['domain'],
+                'location' => $offer['location'],
+                'duration' => $offer['duration'],
+                'description' => $offer['description'],
+                'skills' => $offer['skills'],
+                'deadline' => $offer['deadline']->toDateString(),
+                'details' => $offer['details'],
+                'is_active' => true,
+            ]);
+        }
+
+        InternshipOffer::where('slug', 'developpeur-web-laravel')->update(['title' => 'Offre mise à jour par admin']);
+        InternshipOffer::where('slug', 'assistant-comptable')->update(['is_active' => false]);
+
+        $this->get(route('internships.index'))
+            ->assertOk()
+            ->assertSee('Offre mise à jour par admin')
+            ->assertDontSee('Assistant comptable')
+            ->assertSee('19 offres trouvées');
     }
 }

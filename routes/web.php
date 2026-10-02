@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttributionController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
+use App\Http\Controllers\Admin\InternshipOfferController as AdminInternshipOfferController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeesController;
@@ -49,6 +50,7 @@ Route::get('/admin/dashboard', AdminDashboardController::class)
     ->name('admin.dashboard');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('offers', AdminInternshipOfferController::class)->except(['show']);
     Route::get('student-accounts/{user}/edit', [AdminStudentController::class, 'editAccount'])->name('students.accounts.edit');
     Route::put('student-accounts/{user}', [AdminStudentController::class, 'updateAccount'])->name('students.accounts.update');
     Route::resource('students', AdminStudentController::class);
