@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -28,16 +27,6 @@ class AdminDashboardTest extends TestCase
             $table->string('password');
             $table->rememberToken();
             $table->string('profile_photo_path', 2048)->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('students', function (Blueprint $table) {
-            $table->id();
-            $table->string('matricule');
-            $table->string('nom');
-            $table->string('prenom');
-            $table->date('naissance');
-            $table->string('contact_parent');
             $table->timestamps();
         });
 
@@ -69,19 +58,14 @@ class AdminDashboardTest extends TestCase
         $admin = User::factory()->create();
         $admin->forceFill(['role' => 'admin'])->save();
 
-        Student::create([
-            'matricule' => 'ETU-001',
-            'nom' => 'Test',
-            'prenom' => 'Etudiant',
-            'naissance' => '2000-01-01',
-            'contact_parent' => '0000000000',
-        ]);
+        User::factory()->create(['role' => 'student']);
 
         $response = $this->actingAs($admin)->get(route('admin.dashboard'));
 
         $response->assertOk();
         $response->assertSee('Tableau de bord');
-        $response->assertSee('Étudiants enregistrés');
+        $response->assertSee('Passer au mode sombre');
+        $response->assertSee('Comptes utilisateurs au rôle étudiant');
         $response->assertSee('Entreprises représentées dans les offres disponibles');
         $response->assertSee('Offres actuellement proposées');
         $response->assertSee('Candidatures reçues');

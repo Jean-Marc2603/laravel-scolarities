@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;500;600;700;800&display=swap">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-slate-50 font-sans antialiased text-slate-900">
+<body x-data="{}" class="admin-dashboard min-h-screen bg-slate-50 font-sans antialiased text-slate-900">
     <div class="min-h-screen lg:flex">
         <aside class="flex w-full flex-col border-b border-slate-200 bg-white lg:fixed lg:inset-y-0 lg:left-0 lg:w-64 lg:border-b-0 lg:border-r">
             <div class="flex h-16 items-center gap-3 border-b border-slate-100 px-5">
@@ -73,6 +73,7 @@
                     <div class="flex items-center gap-3">
                         <span class="hidden text-sm text-slate-500 sm:inline">{{ now()->locale('fr')->translatedFormat('l j F Y') }}</span>
                         <span class="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>Système actif</span>
+                        @include('offers.partials.theme-toggle')
                     </div>
                 </div>
             </header>

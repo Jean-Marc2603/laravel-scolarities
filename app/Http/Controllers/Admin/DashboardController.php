@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\InternshipApplication;
-use App\Models\Student;
+use App\Models\User;
 use App\Services\InternshipOfferCatalog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -29,8 +29,8 @@ class DashboardController extends Controller
         $statistics = [
             [
                 'label' => 'Étudiants',
-                'value' => Student::count(),
-                'description' => 'Étudiants enregistrés',
+                'value' => User::where('role', 'student')->count(),
+                'description' => 'Comptes utilisateurs au rôle étudiant',
                 'icon' => 'users',
                 'color' => 'indigo',
             ],

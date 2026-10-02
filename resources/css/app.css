@@ -119,3 +119,51 @@ html.dark .shadow-xl,
 html.dark .shadow-2xl {
     --tw-shadow-color: rgb(0 0 0 / 0.28);
 }
+
+html.dark body.admin-dashboard {
+    color: #e2e8f0;
+    background-color: #0f172a;
+}
+
+html.dark .admin-dashboard .bg-white {
+    background-color: #111827;
+}
+
+html.dark .admin-dashboard .bg-slate-50 {
+    background-color: #0f172a;
+}
+
+html.dark .admin-dashboard .bg-slate-100 {
+    background-color: #1e293b;
+}
+
+html.dark .admin-dashboard .text-slate-900 {
+    color: #f8fafc;
+}
+
+html.dark .admin-dashboard .text-slate-800,
+html.dark .admin-dashboard .text-slate-700 {
+    color: #e2e8f0;
+}
+
+html.dark .admin-dashboard .text-slate-600,
+html.dark .admin-dashboard .text-slate-500 {
+    color: #cbd5e1;
+}
+
+html.dark .admin-dashboard .text-slate-400 {
+    color: #94a3b8;
+}
+
+html.dark .admin-dashboard .border-slate-200,
+html.dark .admin-dashboard .border-slate-100 {
+    border-color: #334155;
+}
+
+html.dark .admin-dashboard .bg-indigo-50 {
+    background-color: #312e81;
+}
+
+html.dark .admin-dashboard .text-indigo-700 {
+    color: #c7d2fe;
+}
