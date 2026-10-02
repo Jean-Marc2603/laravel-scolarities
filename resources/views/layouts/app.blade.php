@@ -35,7 +35,7 @@
                     <x-jet-application-mark class="h-8 w-auto shrink-0" />
                     <span x-show="!sidebarCollapsed" x-transition.opacity
                         class="truncate text-sm font-semibold text-gray-800">
-                        Espace de gestion
+                        Gestion de stage
                     </span>
                 </a>
                 <button type="button" @click="sidebarCollapsed = !sidebarCollapsed"
