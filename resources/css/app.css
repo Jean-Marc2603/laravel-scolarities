@@ -1,3 +1,121 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+[x-cloak] {
+    display: none !important;
+}
+
+html.dark body {
+    color: #e5e7eb;
+    background-color: #0b1120;
+}
+
+html.dark .bg-white,
+html.dark .bg-gray-50 {
+    background-color: #111827;
+}
+
+html.dark .bg-gray-100 {
+    background-color: #0f172a;
+}
+
+html.dark .bg-gray-900 {
+    background-color: #1e293b;
+}
+
+html.dark .bg-gray-950 {
+    background-color: #020617;
+}
+
+html.dark [class~="bg-gray-50/70"] {
+    background-color: rgb(31 41 55 / 0.7);
+}
+
+html.dark .bg-indigo-50 {
+    background-color: #312e81;
+}
+
+html.dark .bg-sky-50 {
+    background-color: #0c4a6e;
+}
+
+html.dark .bg-amber-50 {
+    background-color: #713f12;
+}
+
+html.dark .bg-emerald-50 {
+    background-color: #064e3b;
+}
+
+html.dark .bg-rose-50 {
+    background-color: #881337;
+}
+
+html.dark .text-gray-900,
+html.dark .text-gray-800 {
+    color: #f3f4f6;
+}
+
+html.dark .text-gray-700 {
+    color: #d1d5db;
+}
+
+html.dark .text-gray-600 {
+    color: #cbd5e1;
+}
+
+html.dark .text-gray-500,
+html.dark .text-gray-400 {
+    color: #94a3b8;
+}
+
+html.dark .text-indigo-700 {
+    color: #c7d2fe;
+}
+
+html.dark .text-sky-700 {
+    color: #bae6fd;
+}
+
+html.dark .text-amber-800 {
+    color: #fde68a;
+}
+
+html.dark .text-emerald-800 {
+    color: #a7f3d0;
+}
+
+html.dark .text-rose-800 {
+    color: #fecdd3;
+}
+
+html.dark .border-gray-100 {
+    border-color: #1f2937;
+}
+
+html.dark .border-gray-200 {
+    border-color: #334155;
+}
+
+html.dark .border-gray-300 {
+    border-color: #475569;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+    color: #e5e7eb;
+    background-color: #0f172a;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+    color: #94a3b8;
+}
+
+html.dark .shadow-sm,
+html.dark .shadow-xl,
+html.dark .shadow-2xl {
+    --tw-shadow-color: rgb(0 0 0 / 0.28);
+}
