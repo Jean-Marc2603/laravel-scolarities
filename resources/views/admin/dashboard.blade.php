@@ -34,7 +34,7 @@
                     ['Étudiants', 'students', route('admin.students.index')],
                     ['Entreprises', 'companies', route('admin.companies.index')],
                     ['Offres', 'offers', route('admin.offers.index')],
-                    ['Candidatures', 'applications', null],
+                    ['Candidatures', 'applications', route('admin.applications.index')],
                     ['Stages', 'internships', null],
                     ['Frais de scolarité', 'fees', null],
                 ] as [$label, $key, $href])
@@ -161,7 +161,7 @@
                             ['Étudiants', 'student', route('admin.students.index')],
                             ['Entreprises', 'company', route('admin.companies.index')],
                             ['Offres', 'offer', route('admin.offers.index')],
-                            ['Candidatures', 'application', null],
+                            ['Candidatures', 'application', route('admin.applications.index')],
                             ['Stages', 'internship', null],
                             ['Frais de scolarité', 'fees', null],
                         ] as [$label, $icon, $href])
