@@ -32,7 +32,7 @@
                 @foreach ([
                     ['Utilisateurs', 'users', route('admin.users.index')],
                     ['Étudiants', 'students', route('admin.students.index')],
-                    ['Entreprises', 'companies', null],
+                    ['Entreprises', 'companies', route('admin.companies.index')],
                     ['Offres', 'offers', route('admin.offers.index')],
                     ['Candidatures', 'applications', null],
                     ['Stages', 'internships', null],
@@ -159,7 +159,7 @@
                         @foreach ([
                             ['Utilisateurs', 'user', route('admin.users.index')],
                             ['Étudiants', 'student', route('admin.students.index')],
-                            ['Entreprises', 'company', null],
+                            ['Entreprises', 'company', route('admin.companies.index')],
                             ['Offres', 'offer', route('admin.offers.index')],
                             ['Candidatures', 'application', null],
                             ['Stages', 'internship', null],

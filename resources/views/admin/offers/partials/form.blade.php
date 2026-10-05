@@ -24,9 +24,20 @@
         </div>
         <div>
             <label for="company" class="block text-sm font-semibold text-slate-700">Entreprise</label>
-            <input id="company" name="company" type="text" maxlength="255" required
-                value="{{ old('company', $offer->company) }}"
+            <select id="company_id" name="company_id" required
                 class="mt-2 w-full rounded-xl border-slate-300 bg-white text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">Choisir une entreprise</option>
+                @foreach ($companies as $company)
+                    <option value="{{ $company->id }}" @selected((string) old('company_id', $offer->company_id) === (string) $company->id)>{{ $company->name }}</option>
+                @endforeach
+            </select>
+            @if ($companies->isEmpty())
+                <p class="mt-1.5 text-xs text-amber-700">Aucune entreprise n’est enregistrée. Créez d’abord une entreprise
+                    dans la section Entreprises.</p>
+            @else
+                <p class="mt-1.5 text-xs text-slate-500">La sélection utilise le répertoire des entreprises du back-office.
+                </p>
+            @endif
         </div>
         <div>
             <label for="domain" class="block text-sm font-semibold text-slate-700">Domaine</label>

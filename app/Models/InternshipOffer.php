@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InternshipOffer extends Model
 {
@@ -10,6 +11,7 @@ class InternshipOffer extends Model
         'slug',
         'title',
         'company',
+        'company_id',
         'domain',
         'location',
         'duration',
@@ -25,4 +27,14 @@ class InternshipOffer extends Model
         'deadline' => 'date',
         'is_active' => 'boolean',
     ];
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+
+    public function companyProfile(): BelongsTo
+    {
+        return $this->company();
+    }
 }

@@ -16,11 +16,13 @@
         @if (session('status'))
             <div role="status"
                 class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                {{ session('status') }}</div>
+                {{ session('status') }}
+            </div>
         @endif
         @if (session('error'))
             <div role="alert" class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-                {{ session('error') }}</div>
+                {{ session('error') }}
+            </div>
         @endif
 
         <section
@@ -84,13 +86,16 @@
                             <tr class="transition hover:bg-slate-50">
                                 <td class="min-w-64 px-5 py-4">
                                     <p class="text-sm font-semibold text-slate-900">{{ $offer->title }}</p>
-                                    <p class="mt-0.5 text-xs text-slate-500">{{ $offer->company }}</p>
+                                    <p class="mt-0.5 text-xs text-slate-500">
+                                        {{ $offer->companyProfile?->name ?? $offer->company }}</p>
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600">{{ $offer->domain }}</td>
                                 <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600">{{ $offer->location }} ·
-                                    {{ $offer->duration }}</td>
+                                    {{ $offer->duration }}
+                                </td>
                                 <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600">
-                                    {{ $offer->deadline->format('d/m/Y') }}</td>
+                                    {{ $offer->deadline->format('d/m/Y') }}
+                                </td>
                                 <td class="whitespace-nowrap px-5 py-4">
                                     @if ($offer->is_active)
                                         <span

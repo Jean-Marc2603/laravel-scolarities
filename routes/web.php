@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\InternshipOfferController as AdminInternshipOfferController;
+use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeesController;
@@ -51,6 +52,7 @@ Route::get('/admin/dashboard', AdminDashboardController::class)
     ->name('admin.dashboard');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('companies', AdminCompanyController::class);
     Route::resource('users', AdminUserController::class)->except(['show']);
     Route::resource('offers', AdminInternshipOfferController::class)->except(['show']);
     Route::resource('students', AdminStudentController::class);

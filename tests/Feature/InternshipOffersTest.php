@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Company;
 use App\Models\InternshipOffer;
 use App\Services\InternshipOfferCatalog;
 use Illuminate\Database\Schema\Blueprint;
@@ -49,27 +50,44 @@ class InternshipOffersTest extends TestCase
 
     public function test_student_list_reads_managed_active_offers_from_database(): void
     {
-        Schema::create('internship_offers', function (Blueprint $table) {
-            $table->id();
-            $table->string('slug')->unique();
-            $table->string('title');
-            $table->string('company');
-            $table->string('domain');
-            $table->string('location');
-            $table->string('duration');
-            $table->text('description');
-            $table->json('skills');
-            $table->date('deadline');
-            $table->text('details');
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('companies')) {
+            Schema::create('companies', function (Blueprint $table) {
+                $table->id();
+                $table->string('name')->unique();
+                $table->string('address')->nullable();
+                $table->string('phone', 50)->nullable();
+                $table->string('email')->nullable();
+                $table->string('sector')->nullable();
+                $table->timestamps();
+            });
+        }
+
+        if (! Schema::hasTable('internship_offers')) {
+            Schema::create('internship_offers', function (Blueprint $table) {
+                $table->id();
+                $table->string('slug')->unique();
+                $table->string('title');
+                $table->string('company');
+                $table->foreignId('company_id')->nullable()->constrained('companies')->nullOnDelete();
+                $table->string('domain');
+                $table->string('location');
+                $table->string('duration');
+                $table->text('description');
+                $table->json('skills');
+                $table->date('deadline');
+                $table->text('details');
+                $table->boolean('is_active')->default(true);
+                $table->timestamps();
+            });
+        }
 
         foreach (app(InternshipOfferCatalog::class)->defaults() as $offer) {
+            $company = Company::firstOrCreate(['name' => $offer['company']]);
             InternshipOffer::create([
                 'slug' => $offer['id'],
                 'title' => $offer['title'],
                 'company' => $offer['company'],
+                'company_id' => $company->id,
                 'domain' => $offer['domain'],
                 'location' => $offer['location'],
                 'duration' => $offer['duration'],

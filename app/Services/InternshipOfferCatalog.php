@@ -12,7 +12,7 @@ class InternshipOfferCatalog
     public function all(bool $includeInactive = false): array
     {
         if (Schema::hasTable('internship_offers') && InternshipOffer::exists()) {
-            $query = InternshipOffer::query()->orderBy('id');
+            $query = InternshipOffer::query()->with('companyProfile')->orderBy('id');
             if (! $includeInactive) {
                 $query->where('is_active', true);
             }
@@ -77,7 +77,7 @@ class InternshipOfferCatalog
         return [
             'id' => $offer->slug,
             'title' => $offer->title,
-            'company' => $offer->company,
+            'company' => $offer->companyProfile?->name ?? $offer->company,
             'domain' => $offer->domain,
             'location' => $offer->location,
             'duration' => $offer->duration,

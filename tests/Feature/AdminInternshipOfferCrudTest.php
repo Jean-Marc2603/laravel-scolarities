@@ -12,6 +12,8 @@ use Tests\TestCase;
 
 class AdminInternshipOfferCrudTest extends TestCase
 {
+    private int $companyId;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,11 +34,26 @@ class AdminInternshipOfferCrudTest extends TestCase
             $table->timestamps();
         });
 
+        Schema::create('companies', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('address')->nullable();
+            $table->string('phone', 50)->nullable();
+            $table->string('email')->nullable();
+            $table->string('sector')->nullable();
+            $table->timestamps();
+        });
+
+        $companyId = DB::table('companies')->insertGetId([
+            'name' => 'Tech Exemple', 'created_at' => now(), 'updated_at' => now(),
+        ]);
+
         Schema::create('internship_offers', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
             $table->string('title');
             $table->string('company');
+            $table->foreignId('company_id')->nullable()->constrained('companies')->nullOnDelete();
             $table->string('domain');
             $table->string('location');
             $table->string('duration');
@@ -47,6 +64,8 @@ class AdminInternshipOfferCrudTest extends TestCase
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
+
+        $this->companyId = $companyId;
 
         Schema::create('internship_applications', function (Blueprint $table) {
             $table->id();
@@ -63,7 +82,7 @@ class AdminInternshipOfferCrudTest extends TestCase
     {
         return array_merge([
             'title' => 'Développeur Laravel',
-            'company' => 'Tech Exemple',
+            'company_id' => $this->companyId,
             'domain' => 'Développement web',
             'location' => 'Antananarivo',
             'duration' => '3 mois',
@@ -130,6 +149,7 @@ class AdminInternshipOfferCrudTest extends TestCase
             'slug' => 'stage-a-conserver',
             'title' => 'Stage à conserver',
             'company' => 'Tech Exemple',
+            'company_id' => $this->companyId,
             'domain' => 'Développement web',
             'location' => 'Antananarivo',
             'duration' => '3 mois',

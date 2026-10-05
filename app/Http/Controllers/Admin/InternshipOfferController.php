@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\InternshipApplication;
 use App\Models\InternshipOffer;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class InternshipOfferController extends Controller
@@ -18,10 +20,12 @@ class InternshipOfferController extends Controller
         $search = trim((string) $request->query('q', ''));
 
         $offers = InternshipOffer::query()
+            ->with('companyProfile')
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('title', 'like', '%'.$search.'%')
                         ->orWhere('company', 'like', '%'.$search.'%')
+                        ->orWhereHas('companyProfile', fn ($companyQuery) => $companyQuery->where('name', 'like', '%'.$search.'%'))
                         ->orWhere('domain', 'like', '%'.$search.'%');
                 });
             })
@@ -40,6 +44,7 @@ class InternshipOfferController extends Controller
             'formAction' => route('admin.offers.store'),
             'formMethod' => 'POST',
             'pageTitle' => 'Ajouter une offre',
+            'companies' => Company::orderBy('name')->get(),
         ]);
     }
 
@@ -47,6 +52,7 @@ class InternshipOfferController extends Controller
     {
         $data = $this->validatedOffer($request);
         $data['slug'] = $this->uniqueSlug($data['title']);
+        $data['company'] = Company::findOrFail($data['company_id'])->name;
 
         $offer = InternshipOffer::create($data);
 
@@ -61,12 +67,15 @@ class InternshipOfferController extends Controller
             'formAction' => route('admin.offers.update', $offer),
             'formMethod' => 'PUT',
             'pageTitle' => 'Modifier une offre',
+            'companies' => Company::orderBy('name')->get(),
         ]);
     }
 
     public function update(Request $request, InternshipOffer $offer): RedirectResponse
     {
-        $offer->update($this->validatedOffer($request, $offer));
+        $data = $this->validatedOffer($request, $offer);
+        $data['company'] = Company::findOrFail($data['company_id'])->name;
+        $offer->update($data);
 
         return redirect()->route('admin.offers.index')
             ->with('status', 'L’offre de stage a été mise à jour.');
@@ -104,7 +113,7 @@ class InternshipOfferController extends Controller
 
         return $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'company' => ['required', 'string', 'max:255'],
+            'company_id' => ['required', 'integer', Rule::exists('companies', 'id')],
             'domain' => ['required', 'string', 'max:255'],
             'location' => ['required', 'string', 'max:255'],
             'duration' => ['required', 'string', 'max:100'],
@@ -116,7 +125,7 @@ class InternshipOfferController extends Controller
             'is_active' => ['required', 'boolean'],
         ], [
             'title.required' => 'Le titre de l’offre est obligatoire.',
-            'company.required' => 'Le nom de l’entreprise est obligatoire.',
+            'company_id.required' => 'Sélectionnez une entreprise.',
             'domain.required' => 'Le domaine est obligatoire.',
             'location.required' => 'La localisation est obligatoire.',
             'duration.required' => 'La durée du stage est obligatoire.',
