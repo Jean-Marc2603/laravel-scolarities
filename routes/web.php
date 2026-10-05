@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\InternshipOfferController as AdminInternshipOfferController;
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\InternshipApplicationController as AdminInternshipApplicationController;
+use App\Http\Controllers\Admin\InternshipController as AdminInternshipController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeesController;
@@ -55,6 +56,8 @@ Route::get('/admin/dashboard', AdminDashboardController::class)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('applications', [AdminInternshipApplicationController::class, 'index'])->name('applications.index');
     Route::patch('applications/{application}/status', [AdminInternshipApplicationController::class, 'updateStatus'])->name('applications.updateStatus');
+    Route::get('internships', [AdminInternshipController::class, 'index'])->name('internships.index');
+    Route::get('internships/{internship}', [AdminInternshipController::class, 'show'])->name('internships.show');
     Route::resource('companies', AdminCompanyController::class);
     Route::resource('users', AdminUserController::class)->except(['show']);
     Route::resource('offers', AdminInternshipOfferController::class)->except(['show']);

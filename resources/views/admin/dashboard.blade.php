@@ -35,7 +35,7 @@
                     ['Entreprises', 'companies', route('admin.companies.index')],
                     ['Offres', 'offers', route('admin.offers.index')],
                     ['Candidatures', 'applications', route('admin.applications.index')],
-                    ['Stages', 'internships', null],
+                    ['Stages', 'internships', route('admin.internships.index')],
                     ['Frais de scolarité', 'fees', null],
                 ] as [$label, $key, $href])
                     @if ($href)
@@ -162,7 +162,7 @@
                             ['Entreprises', 'company', route('admin.companies.index')],
                             ['Offres', 'offer', route('admin.offers.index')],
                             ['Candidatures', 'application', route('admin.applications.index')],
-                            ['Stages', 'internship', null],
+                            ['Stages', 'internship', route('admin.internships.index')],
                             ['Frais de scolarité', 'fees', null],
                         ] as [$label, $icon, $href])
                             @if ($href)
