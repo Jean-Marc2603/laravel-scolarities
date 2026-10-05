@@ -29,10 +29,9 @@
         <section
             class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <p class="text-sm font-semibold text-slate-800">{{ $studentAccounts->total() }} compte(s) étudiant(s) ·
-                    {{ $students->total() }} dossier(s) étudiant(s)</p>
-                <p class="mt-1 text-sm text-slate-500">Les comptes utilisent users.role=student. Les dossiers scolaires
-                    sont conservés séparément.</p>
+                <p class="text-sm font-semibold text-slate-800">{{ $students->total() }} dossier(s) étudiant(s)</p>
+                <p class="mt-1 text-sm text-slate-500">Chaque dossier peut être associé à un compte dans la section
+                    Utilisateurs.</p>
             </div>
             <a href="{{ route('admin.students.create') }}"
                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700">
@@ -42,57 +41,6 @@
                 </svg>
                 Ajouter un étudiant
             </a>
-        </section>
-
-        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div class="border-b border-slate-100 p-5">
-                <h2 class="text-base font-bold text-slate-900">Comptes étudiants</h2>
-                <p class="mt-1 text-sm text-slate-500">Comptes déjà enregistrés dans la table users avec le rôle
-                    student. Modifiez leur nom ou leur adresse e-mail.</p>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-100 text-left">
-                    <thead class="bg-slate-50">
-                        <tr>
-                            <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
-                                Nom</th>
-                            <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
-                                Adresse e-mail</th>
-                            <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
-                                Compte créé le</th>
-                            <th scope="col"
-                                class="px-5 py-3 text-right text-xs font-bold uppercase tracking-wide text-slate-500">
-                                Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        @forelse ($studentAccounts as $account)
-                            <tr class="transition hover:bg-slate-50">
-                                <td class="whitespace-nowrap px-5 py-4 text-sm font-semibold text-slate-900">
-                                    {{ $account->name }}</td>
-                                <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600">{{ $account->email }}</td>
-                                <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600">
-                                    {{ $account->created_at?->format('d/m/Y') ?? '—' }}</td>
-                                <td class="whitespace-nowrap px-5 py-4 text-right">
-                                    <a href="{{ route('admin.students.accounts.edit', $account) }}"
-                                        class="rounded-lg px-3 py-2 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-50">Modifier
-                                        le compte</a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="px-5 py-10 text-center">
-                                    <p class="text-sm font-semibold text-slate-800">Aucun compte avec le rôle student</p>
-                                    <p class="mt-1 text-sm text-slate-500">Les comptes étudiants apparaîtront ici.</p>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-            @if ($studentAccounts->hasPages())
-                <div class="border-t border-slate-100 px-5 py-4">{{ $studentAccounts->links() }}</div>
-            @endif
         </section>
 
         <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -126,6 +74,8 @@
                             <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
                                 Étudiant</th>
                             <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                                Compte utilisateur</th>
+                            <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
                                 Naissance</th>
                             <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
                                 Contact parent</th>
@@ -145,6 +95,15 @@
                                         {{ $student->prenom }}
                                     </p>
                                     <p class="mt-0.5 text-xs text-slate-500">Dossier étudiant</p>
+                                </td>
+                                <td class="whitespace-nowrap px-5 py-4">
+                                    @if ($student->user)
+                                        <p class="text-sm font-medium text-slate-800">{{ $student->user->email }}</p>
+                                        <span
+                                            class="text-xs {{ $student->user->is_active ? 'text-emerald-700' : 'text-rose-600' }}">{{ $student->user->is_active ? 'Compte actif' : 'Compte désactivé' }}</span>
+                                    @else
+                                        <span class="text-xs font-medium text-slate-400">Aucun compte lié</span>
+                                    @endif
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600">
                                     {{ \Illuminate\Support\Carbon::parse($student->naissance)->format('d/m/Y') }}
@@ -170,7 +129,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-5 py-14 text-center">
+                                <td colspan="6" class="px-5 py-14 text-center">
                                     <p class="text-sm font-semibold text-slate-800">Aucun étudiant trouvé</p>
                                     <p class="mt-1 text-sm text-slate-500">Ajoutez un dossier étudiant ou modifiez votre
                                         recherche.</p>

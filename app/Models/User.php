@@ -49,6 +49,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
     /**
@@ -68,6 +69,11 @@ class User extends Authenticatable
     public function cvDocument(): HasOne
     {
         return $this->hasOne(CvDocument::class);
+    }
+
+    public function studentProfile(): HasOne
+    {
+        return $this->hasOne(Student::class);
     }
 
     /**

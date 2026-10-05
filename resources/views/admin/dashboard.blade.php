@@ -30,7 +30,7 @@
                     <p class="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Gestion</p>
                 </div>
                 @foreach ([
-                    ['Utilisateurs', 'users', null],
+                    ['Utilisateurs', 'users', route('admin.users.index')],
                     ['Étudiants', 'students', route('admin.students.index')],
                     ['Entreprises', 'companies', null],
                     ['Offres', 'offers', route('admin.offers.index')],
@@ -157,7 +157,7 @@
                     </div>
                     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         @foreach ([
-                            ['Utilisateurs', 'user', null],
+                            ['Utilisateurs', 'user', route('admin.users.index')],
                             ['Étudiants', 'student', route('admin.students.index')],
                             ['Entreprises', 'company', null],
                             ['Offres', 'offer', route('admin.offers.index')],

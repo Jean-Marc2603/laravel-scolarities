@@ -4,19 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
     use HasFactory;
-    protected $guarded = [''];
 
+    protected $guarded = [''];
 
     public function student()
     {
         return $this->belongsTo(Student::class);
     }
+
     public function classe()
     {
         return $this->belongsTo(Classe::class);
+    }
+
+    public function schoolYear(): BelongsTo
+    {
+        return $this->belongsTo(SchoolYear::class, 'school_year_id');
     }
 }
