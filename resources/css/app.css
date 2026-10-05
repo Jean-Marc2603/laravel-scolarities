@@ -137,6 +137,53 @@ html.dark .admin-dashboard .bg-slate-100 {
     background-color: #1e293b;
 }
 
+html.dark .admin-dashboard .text-slate-950,
+html.dark .admin-dashboard .text-slate-900,
+html.dark .admin-dashboard .text-slate-800,
+html.dark .admin-dashboard .text-slate-700,
+html.dark .admin-dashboard .text-slate-600,
+html.dark .admin-dashboard .text-slate-500,
+html.dark .admin-dashboard .text-slate-400,
+html.dark .admin-dashboard .text-slate-300,
+html.dark .admin-dashboard .text-slate-200 {
+    color: #e2e8f0;
+}
+
+html.dark .admin-dashboard .text-indigo-700,
+html.dark .admin-dashboard .text-indigo-600,
+html.dark .admin-dashboard .text-indigo-500,
+html.dark .admin-dashboard .text-indigo-400 {
+    color: #c7d2fe;
+}
+
+html.dark .admin-dashboard .text-emerald-700,
+html.dark .admin-dashboard .text-emerald-600,
+html.dark .admin-dashboard .text-emerald-800 {
+    color: #a7f3d0;
+}
+
+html.dark .admin-dashboard .text-amber-700,
+html.dark .admin-dashboard .text-amber-800,
+html.dark .admin-dashboard .text-amber-600 {
+    color: #fcd34d;
+}
+
+html.dark .admin-dashboard .text-rose-700,
+html.dark .admin-dashboard .text-rose-800,
+html.dark .admin-dashboard .text-rose-600 {
+    color: #fda4af;
+}
+
+html.dark .admin-dashboard .text-indigo-100,
+html.dark .admin-dashboard .text-indigo-200 {
+    color: #e0e7ff;
+}
+
+html.dark .admin-dashboard .text-slate-50,
+html.dark .admin-dashboard .text-white {
+    color: #f8fafc;
+}
+
 html.dark .admin-dashboard .text-slate-900 {
     color: #f8fafc;
 }
@@ -166,4 +213,75 @@ html.dark .admin-dashboard .bg-indigo-50 {
 
 html.dark .admin-dashboard .text-indigo-700 {
     color: #c7d2fe;
+}
+
+/* Keep every Tailwind palette readable in dark mode across admin screens. */
+html.dark .admin-dashboard [class*="text-slate-"],
+html.dark .admin-dashboard [class*="text-gray-"],
+html.dark .admin-dashboard [class*="text-zinc-"],
+html.dark .admin-dashboard [class*="text-neutral-"],
+html.dark .admin-dashboard [class*="text-stone-"],
+html.dark .admin-dashboard [class*="text-red-"],
+html.dark .admin-dashboard [class*="text-orange-"],
+html.dark .admin-dashboard [class*="text-amber-"],
+html.dark .admin-dashboard [class*="text-yellow-"],
+html.dark .admin-dashboard [class*="text-lime-"],
+html.dark .admin-dashboard [class*="text-green-"],
+html.dark .admin-dashboard [class*="text-emerald-"],
+html.dark .admin-dashboard [class*="text-teal-"],
+html.dark .admin-dashboard [class*="text-cyan-"],
+html.dark .admin-dashboard [class*="text-sky-"],
+html.dark .admin-dashboard [class*="text-blue-"],
+html.dark .admin-dashboard [class*="text-indigo-"],
+html.dark .admin-dashboard [class*="text-violet-"],
+html.dark .admin-dashboard [class*="text-purple-"],
+html.dark .admin-dashboard [class*="text-fuchsia-"],
+html.dark .admin-dashboard [class*="text-pink-"],
+html.dark .admin-dashboard [class*="text-rose-"] {
+    color: #e2e8f0;
+}
+
+html.dark .admin-dashboard [class~="text-white"] {
+    color: #ffffff;
+}
+
+html.dark .admin-dashboard [class~="bg-slate-50"],
+html.dark .admin-dashboard [class~="bg-slate-100"],
+html.dark .admin-dashboard [class~="bg-gray-50"],
+html.dark .admin-dashboard [class~="bg-gray-100"],
+html.dark .admin-dashboard [class~="bg-red-50"],
+html.dark .admin-dashboard [class~="bg-red-100"],
+html.dark .admin-dashboard [class~="bg-orange-50"],
+html.dark .admin-dashboard [class~="bg-orange-100"],
+html.dark .admin-dashboard [class~="bg-amber-50"],
+html.dark .admin-dashboard [class~="bg-amber-100"],
+html.dark .admin-dashboard [class~="bg-yellow-50"],
+html.dark .admin-dashboard [class~="bg-yellow-100"],
+html.dark .admin-dashboard [class~="bg-lime-50"],
+html.dark .admin-dashboard [class~="bg-lime-100"],
+html.dark .admin-dashboard [class~="bg-green-50"],
+html.dark .admin-dashboard [class~="bg-green-100"],
+html.dark .admin-dashboard [class~="bg-emerald-50"],
+html.dark .admin-dashboard [class~="bg-emerald-100"],
+html.dark .admin-dashboard [class~="bg-teal-50"],
+html.dark .admin-dashboard [class~="bg-teal-100"],
+html.dark .admin-dashboard [class~="bg-cyan-50"],
+html.dark .admin-dashboard [class~="bg-cyan-100"],
+html.dark .admin-dashboard [class~="bg-sky-50"],
+html.dark .admin-dashboard [class~="bg-sky-100"],
+html.dark .admin-dashboard [class~="bg-blue-50"],
+html.dark .admin-dashboard [class~="bg-blue-100"],
+html.dark .admin-dashboard [class~="bg-indigo-50"],
+html.dark .admin-dashboard [class~="bg-indigo-100"],
+html.dark .admin-dashboard [class~="bg-violet-50"],
+html.dark .admin-dashboard [class~="bg-violet-100"],
+html.dark .admin-dashboard [class~="bg-purple-50"],
+html.dark .admin-dashboard [class~="bg-purple-100"],
+html.dark .admin-dashboard [class~="bg-fuchsia-50"],
+html.dark .admin-dashboard [class~="bg-fuchsia-100"],
+html.dark .admin-dashboard [class~="bg-pink-50"],
+html.dark .admin-dashboard [class~="bg-pink-100"],
+html.dark .admin-dashboard [class~="bg-rose-50"],
+html.dark .admin-dashboard [class~="bg-rose-100"] {
+    background-color: #1e293b;
 }
