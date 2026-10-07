@@ -73,7 +73,7 @@ class AdminDashboardTest extends TestCase
         $response->assertSee('Module de conventions non configuré');
         $response->assertSee('Utilisateurs');
         $response->assertSee('Étudiants');
-        $response->assertSee('Frais de scolarité');
+        $response->assertDontSee('Frais de scolarité');
         $response->assertSee('>1</p>', false);
         $response->assertSee('>20</p>', false);
     }

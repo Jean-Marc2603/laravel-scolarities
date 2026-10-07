@@ -36,7 +36,6 @@
                     ['Offres', 'offers', route('admin.offers.index')],
                     ['Candidatures', 'applications', route('admin.applications.index')],
                     ['Stages', 'internships', route('admin.internships.index')],
-                    ['Frais de scolarité', 'fees', null],
                 ] as [$label, $key, $href])
                     @if ($href)
                         <a href="{{ $href }}" @if (request()->routeIs('admin.students.*')) aria-current="page" @endif class="flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-50">
@@ -167,7 +166,6 @@
                             ['Offres', 'offer', route('admin.offers.index')],
                             ['Candidatures', 'application', route('admin.applications.index')],
                             ['Stages', 'internship', route('admin.internships.index')],
-                            ['Frais de scolarité', 'fees', null],
                         ] as [$label, $icon, $href])
                             @if ($href)
                                 <a href="{{ $href }}" class="flex items-center gap-3 rounded-xl border border-indigo-100 bg-white p-4 shadow-sm transition hover:border-indigo-300 hover:shadow-md">
