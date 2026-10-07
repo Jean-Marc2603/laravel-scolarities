@@ -85,4 +85,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(InternshipApplication::class);
     }
+
+    public function studentInternships(): HasMany
+    {
+        return $this->hasMany(StudentInternship::class);
+    }
 }

@@ -13,6 +13,7 @@ use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeesController;
 use App\Http\Controllers\InternshipOfferController;
 use App\Http\Controllers\InternshipApplicationController;
+use App\Http\Controllers\StudentInternshipController;
 use App\Http\Controllers\LevelsController;
 use App\Http\Controllers\NiveauController;
 use App\Http\Controllers\ParentController;
@@ -65,6 +66,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/mon-stage', [StudentInternshipController::class, 'show'])->name('student.internship.show');
+    Route::patch('/mon-stage/taches/{task}/avancement', [StudentInternshipController::class, 'updateTaskProgress'])
+        ->whereNumber('task')
+        ->name('student.internship.tasks.update');
+
     Route::get('/mes-candidatures', [InternshipApplicationController::class, 'index'])->name('applications.index');
     Route::get('/mes-candidatures/{application}', [InternshipApplicationController::class, 'show'])->name('applications.show');
     Route::delete('/mes-candidatures/{application}', [InternshipApplicationController::class, 'destroy'])->name('applications.destroy');

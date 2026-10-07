@@ -83,16 +83,28 @@
                     <span x-show="!sidebarCollapsed" x-transition.opacity>Offres de stage</span>
                 </a>
 
-                <a href="#" aria-disabled="true" title="Cette page n'est pas encore disponible" @click.prevent
-                    class="group flex cursor-not-allowed items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-500 transition"
-                    :class="sidebarCollapsed ? 'md:justify-center md:px-0' : ''"
-                    :title="sidebarCollapsed ? 'Entreprises' : 'Cette page n’est pas encore disponible'">
+                @php
+                    $hasAcceptedInternship = Auth::check()
+                        && Auth::user()->role === 'student'
+                        && Auth::user()->internshipApplications()
+                            ->where('status', \App\Models\InternshipApplication::STATUS_ACCEPTED)
+                            ->exists();
+                @endphp
+                <a @if ($hasAcceptedInternship) href="{{ route('student.internship.show') }}" @else href="#"
+                aria-disabled="true" @endif @if (!$hasAcceptedInternship) @click.prevent @endif @class([
+                        'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition',
+                        'bg-indigo-50 text-indigo-700' => request()->routeIs('student.internship.*'),
+                        'text-gray-600 hover:bg-gray-100 hover:text-gray-900' => $hasAcceptedInternship && !request()->routeIs('student.internship.*'),
+                        'cursor-not-allowed text-gray-400' => !$hasAcceptedInternship,
+                    ]) :class="sidebarCollapsed ? 'md:justify-center md:px-0' : ''"
+                    :title="sidebarCollapsed ? 'Mon stage' : ''" @if (request()->routeIs('student.internship.*'))
+                    aria-current="page" @endif>
                     <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="1.8" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-3M8 9v.01M8 12v.01M8 15v.01M8 18v.01M16 13v.01M16 16v.01M16 19v.01" />
                     </svg>
-                    <span x-show="!sidebarCollapsed" x-transition.opacity>Entreprises</span>
+                    <span x-show="!sidebarCollapsed" x-transition.opacity>Mon stage</span>
                 </a>
 
                 <a href="{{ route('applications.index') }}" @click="mobileSidebarOpen = false" @class([
