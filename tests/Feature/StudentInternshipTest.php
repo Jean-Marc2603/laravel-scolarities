@@ -51,6 +51,7 @@ class StudentInternshipTest extends TestCase
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('stage_title')->nullable();
+            $table->text('admin_observation')->nullable();
             $table->timestamps();
         });
 
@@ -84,6 +85,7 @@ class StudentInternshipTest extends TestCase
             ->assertSee('Mon stage')
             ->assertSee('Développeur Web Laravel')
             ->assertSee('Tech Solutions')
+            ->assertSee('Aucune observation pour le moment')
             ->assertSee('Analyse du projet')
             ->assertSee('Présentation finale')
             ->assertSee('0%');
@@ -126,6 +128,40 @@ class StudentInternshipTest extends TestCase
         $this->get(route('student.internship.show'))
             ->assertOk()
             ->assertSee('Poste personnalisé par l’administration');
+    }
+
+    public function test_student_can_only_read_their_own_stage_observation_and_last_update(): void
+    {
+        $student = $this->student();
+        $otherStudent = $this->student();
+        $application = $this->application($student, InternshipApplication::STATUS_ACCEPTED);
+        $otherApplication = $this->application($otherStudent, InternshipApplication::STATUS_ACCEPTED);
+
+        $ownStage = StudentInternship::create([
+            'internship_application_id' => $application->id,
+            'user_id' => $student->id,
+            'admin_observation' => 'Votre observation de suivi.',
+        ]);
+        $ownStage->timestamps = false;
+        $ownStage->forceFill(['updated_at' => '2026-10-06 14:30:00'])->save();
+        $this->assertSame('Votre observation de suivi.', $ownStage->fresh()->admin_observation);
+        StudentInternship::create([
+            'internship_application_id' => $otherApplication->id,
+            'user_id' => $otherStudent->id,
+            'admin_observation' => 'Observation confidentielle autre étudiant.',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->actingAs($student)->get(route('student.internship.show'))
+            ->assertOk()
+            ->assertSee('Observations de l’administrateur')
+            ->assertSee('Votre observation de suivi.')
+            ->assertSee('Mis à jour le 06/10/2026 à 14:30')
+            ->assertDontSee('Observation confidentielle autre étudiant.')
+            ->assertDontSee('<textarea name="admin_observation"', false);
+
+        $this->assertSame($student->id, $ownStage->fresh()->user_id);
     }
 
     public function test_student_cannot_change_another_students_task(): void
