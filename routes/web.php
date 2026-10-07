@@ -66,6 +66,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('internships/{studentInternship}/dates', [AdminInternshipController::class, 'updateDates'])
         ->whereNumber('studentInternship')
         ->name('internships.dates.update');
+    Route::patch('internships/{studentInternship}/title', [AdminInternshipController::class, 'updateTitle'])
+        ->whereNumber('studentInternship')
+        ->name('internships.title.update');
     Route::resource('companies', AdminCompanyController::class);
     Route::resource('users', AdminUserController::class)->except(['show']);
     Route::resource('offers', AdminInternshipOfferController::class)->except(['show']);

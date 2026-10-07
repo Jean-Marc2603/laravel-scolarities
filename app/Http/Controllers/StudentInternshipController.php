@@ -45,6 +45,7 @@ class StudentInternshipController extends Controller
 
         $offer = collect($catalog->all(true))->firstWhere('id', $application->offer_id);
         abort_unless((bool) $offer, 404);
+        $offer['title'] = $internship->stage_title ?: $offer['title'];
 
         $progress = $internship->progressPercentage();
 

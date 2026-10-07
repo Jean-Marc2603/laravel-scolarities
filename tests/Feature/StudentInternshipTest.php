@@ -50,6 +50,7 @@ class StudentInternshipTest extends TestCase
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->string('stage_title')->nullable();
             $table->timestamps();
         });
 
@@ -108,6 +109,23 @@ class StudentInternshipTest extends TestCase
         $this->patch(route('student.internship.tasks.update', $task), ['progress' => 50])
             ->assertSessionHasErrors('progress');
         $this->assertDatabaseHas('internship_tasks', ['id' => $task->id, 'progress' => 100]);
+    }
+
+    public function test_student_sees_admin_stage_title_override_or_linked_offer_title_by_default(): void
+    {
+        $student = $this->student();
+        $application = $this->application($student, InternshipApplication::STATUS_ACCEPTED);
+
+        $this->actingAs($student)->get(route('student.internship.show'))
+            ->assertOk()
+            ->assertSee('Développeur Web Laravel');
+
+        $internship = StudentInternship::where('internship_application_id', $application->id)->firstOrFail();
+        $internship->update(['stage_title' => 'Poste personnalisé par l’administration']);
+
+        $this->get(route('student.internship.show'))
+            ->assertOk()
+            ->assertSee('Poste personnalisé par l’administration');
     }
 
     public function test_student_cannot_change_another_students_task(): void

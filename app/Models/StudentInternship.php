@@ -13,6 +13,7 @@ class StudentInternship extends Model
         'user_id',
         'start_date',
         'end_date',
+        'stage_title',
         'admin_observation',
     ];
 

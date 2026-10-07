@@ -83,6 +83,7 @@ class AdminStageProgressTest extends TestCase
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->string('stage_title')->nullable();
             $table->text('admin_observation')->nullable();
             $table->timestamps();
         });
@@ -168,6 +169,51 @@ class AdminStageProgressTest extends TestCase
         ])->assertSessionHasErrors('end_date');
     }
 
+    public function test_admin_can_edit_stage_title_without_changing_linked_offer_or_progress_and_student_sees_it(): void
+    {
+        [$student, , $stage] = $this->createAcceptedStage();
+        $task = $this->createTask($stage, 'Analyse du projet', 40);
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)->get(route('admin.internships.show', 'progress-'.$stage->id))
+            ->assertOk()
+            ->assertSee('Stage développeur')
+            ->assertSee('Modifier');
+
+        $this->patch(route('admin.internships.title.update', $stage->id), [
+            'stage_title' => 'Développeur Laravel — équipe plateforme',
+        ])->assertRedirect(route('admin.internships.show', 'progress-'.$stage->id));
+
+        $this->assertDatabaseHas('student_internships', [
+            'id' => $stage->id,
+            'stage_title' => 'Développeur Laravel — équipe plateforme',
+        ]);
+        $this->assertDatabaseHas('internship_offers', [
+            'slug' => 'stage-developpeur',
+            'title' => 'Stage développeur',
+        ]);
+        $this->assertDatabaseHas('internship_tasks', ['id' => $task->id, 'progress' => 40]);
+
+        $this->get(route('admin.internships.show', 'progress-'.$stage->id))
+            ->assertOk()
+            ->assertSee('Développeur Laravel — équipe plateforme');
+
+        $this->actingAs($student)->get(route('student.internship.show'))
+            ->assertOk()
+            ->assertSee('Développeur Laravel — équipe plateforme');
+    }
+
+    public function test_non_admin_cannot_update_stage_title(): void
+    {
+        [$student, , $stage] = $this->createAcceptedStage();
+
+        $this->actingAs($student)
+            ->patch(route('admin.internships.title.update', $stage->id), ['stage_title' => 'Unauthorized title'])
+            ->assertForbidden();
+
+        $this->assertNull($stage->fresh()->stage_title);
+    }
+
     public function test_only_admin_can_view_or_update_admin_stage_tracking(): void
     {
         [, , $stage] = $this->createAcceptedStage();
@@ -176,6 +222,7 @@ class AdminStageProgressTest extends TestCase
         $this->actingAs($student)->get(route('admin.internships.index'))->assertForbidden();
         $this->patch(route('admin.internships.observation.update', $stage->id), ['admin_observation' => 'Not allowed'])->assertForbidden();
         $this->patch(route('admin.internships.dates.update', $stage->id), [])->assertForbidden();
+        $this->patch(route('admin.internships.title.update', $stage->id), ['stage_title' => 'Not allowed'])->assertForbidden();
     }
 
     private function createAcceptedStage(): array

@@ -58,7 +58,23 @@
                 <h3 class="text-base font-bold text-slate-900">Entreprise et période</h3>
                 <dl class="mt-4 space-y-4 text-sm">
                     <div><dt class="font-semibold text-slate-500">Entreprise</dt><dd class="mt-1 text-slate-900">{{ $stage['company_name'] }}</dd></div>
-                    <div><dt class="font-semibold text-slate-500">Offre / poste</dt><dd class="mt-1 text-slate-900">{{ $stage['offer_title'] ?? 'Offre non renseignée' }}</dd></div>
+                    <div x-data="{ editingTitle: false }">
+                        <dt class="font-semibold text-slate-500">Offre / poste</dt>
+                        <dd class="mt-1 text-slate-900" x-show="!editingTitle">{{ $stage['offer_title'] ?? 'Offre non renseignée' }}</dd>
+                        @if ($stage['student_internship'])
+                            <form method="POST" action="{{ route('admin.internships.title.update', $stage['student_internship']->id) }}" class="mt-2 flex flex-wrap items-center gap-2">
+                                @csrf
+                                @method('PATCH')
+                                <input type="text" name="stage_title" value="{{ old('stage_title', $stage['offer_title'] ?? '') }}" maxlength="255" required x-show="editingTitle" x-cloak class="min-w-0 flex-1 rounded-lg border-slate-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500" aria-label="Titre exact du poste ou de l’offre de stage">
+                                <button type="button" x-show="!editingTitle" @click="editingTitle = true; $nextTick(() => $el.closest('div').querySelector('input').focus())" class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Modifier</button>
+                                <button type="submit" x-show="editingTitle" x-cloak class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-indigo-700">Enregistrer</button>
+                                <button type="button" x-show="editingTitle" x-cloak @click="editingTitle = false" class="rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-100">Annuler</button>
+                            </form>
+                            @error('stage_title')
+                                <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                            @enderror
+                        @endif
+                    </div>
                     <div><dt class="font-semibold text-slate-500">Date de début</dt><dd class="mt-1 text-slate-900">{{ $stage['start_date'] ? \Illuminate\Support\Carbon::parse($stage['start_date'])->format('d/m/Y') : '—' }}</dd></div>
                     <div><dt class="font-semibold text-slate-500">Date de fin</dt><dd class="mt-1 text-slate-900">{{ $stage['end_date'] ? \Illuminate\Support\Carbon::parse($stage['end_date'])->format('d/m/Y') : '—' }}</dd></div>
                 </dl>

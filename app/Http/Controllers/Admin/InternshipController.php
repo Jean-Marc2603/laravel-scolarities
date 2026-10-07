@@ -88,7 +88,8 @@ class InternshipController extends Controller
                 'company_id' => null,
                 'company_name' => $offer['company'] ?? 'Entreprise inconnue',
                 'offer_id' => $studentInternship->application->offer_id,
-                'offer_title' => $offer['title'] ?? 'Offre indisponible',
+                'offer_title' => $studentInternship->stage_title ?: ($offer['title'] ?? 'Offre indisponible'),
+                'linked_offer_title' => $offer['title'] ?? null,
                 'start_date' => $studentInternship->start_date,
                 'end_date' => $studentInternship->end_date,
                 'status' => $progress === 100 ? 'completed' : 'active',
@@ -180,6 +181,23 @@ class InternshipController extends Controller
             ->with('status', 'Les dates du stage ont été enregistrées.');
     }
 
+    public function updateTitle(Request $request, int $studentInternship): RedirectResponse
+    {
+        $data = $request->validate([
+            'stage_title' => ['required', 'string', 'max:255'],
+        ]);
+
+        $stage = StudentInternship::query()
+            ->whereHas('application', fn ($query) => $query->where('status', InternshipApplication::STATUS_ACCEPTED))
+            ->findOrFail($studentInternship);
+        abort_unless($stage->application()->where('user_id', $stage->user_id)->exists(), 404);
+
+        $stage->update(['stage_title' => trim($data['stage_title'])]);
+
+        return redirect()->route('admin.internships.show', 'progress-'.$stage->id)
+            ->with('status', 'Le poste du stage a été enregistré.');
+    }
+
     private function studentProgressStages(InternshipOfferCatalog $catalog)
     {
         if (! Schema::hasTable('student_internships')) {
@@ -205,7 +223,7 @@ class InternshipController extends Controller
                     'company_id' => null,
                     'company_name' => $offer['company'] ?? 'Entreprise inconnue',
                     'offer_id' => $stage->application->offer_id,
-                    'offer_title' => $offer['title'] ?? 'Offre indisponible',
+                    'offer_title' => $stage->stage_title ?: ($offer['title'] ?? 'Offre indisponible'),
                     'start_date' => $stage->start_date,
                     'end_date' => $stage->end_date,
                     'status' => $progress === 100 ? 'completed' : 'active',
