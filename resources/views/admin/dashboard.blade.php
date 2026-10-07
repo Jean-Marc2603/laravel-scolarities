@@ -101,7 +101,11 @@
                             <h2 id="statistics-title" class="text-lg font-bold text-slate-900">Indicateurs clés</h2>
                             <p class="mt-1 text-sm text-slate-500">Données actuellement disponibles dans l’application.</p>
                         </div>
-                        <span class="hidden rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 shadow-sm ring-1 ring-slate-200 sm:inline">Mis à jour en direct</span>
+                        <span class="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 shadow-sm ring-1 ring-slate-200">
+                            <span class="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                            <span data-dashboard-live-status>Actualisation automatique</span>
+                            <span class="font-normal">· <time data-dashboard-updated>{{ now()->format('H:i:s') }}</time></span>
+                        </span>
                     </div>
 
                     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -120,7 +124,7 @@
                                 <div class="flex items-start justify-between gap-4">
                                     <div>
                                         <p class="text-sm font-semibold text-slate-500">{{ $statistic['label'] }}</p>
-                                        <p class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900">{{ number_format($statistic['value']) }}</p>
+                                        <p class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900" data-live-statistic="{{ $statistic['key'] }}" aria-live="polite">{{ number_format($statistic['value']) }}</p>
                                     </div>
                                     <span class="flex h-11 w-11 items-center justify-center rounded-xl ring-1 {{ $iconColors[$statistic['color']] }}">
                                         @switch($statistic['icon'])
@@ -189,5 +193,52 @@
             </div>
         </main>
     </div>
+<script>
+    (() => {
+        const endpoint = @json(route('admin.dashboard.statistics'));
+        const refreshInterval = 5000;
+        const statusElement = document.querySelector('[data-dashboard-live-status]');
+        const updatedElement = document.querySelector('[data-dashboard-updated]');
+        let refreshInProgress = false;
+
+        async function refreshDashboardStatistics() {
+            if (refreshInProgress || document.visibilityState === 'hidden') return;
+
+            refreshInProgress = true;
+            try {
+                const response = await fetch(endpoint, {
+                    headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                    credentials: 'same-origin',
+                    cache: 'no-store',
+                });
+                if (!response.ok) throw new Error('Statistics refresh failed');
+
+                const payload = await response.json();
+                document.querySelectorAll('[data-live-statistic]').forEach((element) => {
+                    const key = element.dataset.liveStatistic;
+                    if (Object.prototype.hasOwnProperty.call(payload.statistics, key)) {
+                        element.textContent = new Intl.NumberFormat('fr-FR').format(payload.statistics[key]);
+                    }
+                });
+
+                if (updatedElement && payload.updated_at) {
+                    updatedElement.textContent = new Intl.DateTimeFormat('fr-FR', {
+                        hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    }).format(new Date(payload.updated_at));
+                }
+                if (statusElement) statusElement.textContent = 'Actualisation automatique';
+            } catch (error) {
+                if (statusElement) statusElement.textContent = 'Actualisation momentanément indisponible';
+            } finally {
+                refreshInProgress = false;
+            }
+        }
+
+        window.setInterval(refreshDashboardStatistics, refreshInterval);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') refreshDashboardStatistics();
+        });
+    })();
+</script>
 </body>
 </html>

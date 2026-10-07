@@ -52,7 +52,8 @@
                         <option value="">Tous</option>
                         @foreach ($students as $student)
                             <option value="{{ $student->id }}" {{ $studentFilter == $student->id ? 'selected' : '' }}>
-                                {{ $student->name }}</option>
+                                {{ $student->name }}
+                            </option>
                         @endforeach
                     </select>
                 </label>
@@ -65,7 +66,8 @@
                         <option value="">Toutes</option>
                         @foreach ($companies as $company)
                             <option value="{{ $company->id }}" {{ $companyFilter == $company->id ? 'selected' : '' }}>
-                                {{ $company->name }}</option>
+                                {{ $company->name }}
+                            </option>
                         @endforeach
                     </select>
                 </label>
@@ -77,7 +79,8 @@
                         <option value="">Tous</option>
                         @foreach ($statuses as $status)
                             <option value="{{ $status }}" {{ $statusFilter === $status ? 'selected' : '' }}>
-                                {{ ucfirst(str_replace('_', ' ', $status)) }}</option>
+                                {{ ucfirst(str_replace('_', ' ', $status)) }}
+                            </option>
                         @endforeach
                     </select>
                 </label>
@@ -105,6 +108,8 @@
                             <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
                                 Fin</th>
                             <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                                Progression</th>
+                            <th scope="col" class="px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500">
                                 Statut</th>
                             <th scope="col"
                                 class="px-5 py-3 text-right text-xs font-bold uppercase tracking-wide text-slate-500">
@@ -124,6 +129,22 @@
                                 <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600">
                                     {{ $internship['end_date'] ? \Illuminate\Support\Carbon::parse($internship['end_date'])->format('d/m/Y') : '—' }}
                                 </td>
+                                <td class="min-w-40 px-5 py-4">
+                                    @if ($internship['progress'] !== null)
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-2 w-20 overflow-hidden rounded-full bg-slate-100">
+                                                <div class="h-full rounded-full bg-indigo-600"
+                                                    style="width: {{ $internship['progress'] }}%"></div>
+                                            </div>
+                                            <span
+                                                class="text-sm font-semibold text-slate-700">{{ $internship['progress'] }}%</span>
+                                        </div>
+                                        <p class="mt-1 text-xs text-slate-500">
+                                            {{ $internship['completed_tasks'] }}/{{ $internship['total_tasks'] }} tâches</p>
+                                    @else
+                                        <span class="text-sm text-slate-500">Non renseignée</span>
+                                    @endif
+                                </td>
                                 <td class="whitespace-nowrap px-5 py-4">
                                     @php
                                         $statusMap = [
@@ -135,7 +156,7 @@
                                     @endphp
                                     <span
                                         class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ring-1 {{ $statusMap[$internship['status']] ?? 'bg-slate-100 text-slate-600 ring-slate-200' }}">
-                                        {{ ucfirst(str_replace('_', ' ', $internship['status'] ?? 'non_renseigne')) }}
+                                        {{ ['active' => 'En cours', 'completed' => 'Terminé', 'accepted' => 'Acceptée'][$internship['status']] ?? ucfirst(str_replace('_', ' ', $internship['status'] ?? 'non_renseigne')) }}
                                     </span>
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-4 text-right">
@@ -145,7 +166,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-5 py-14 text-center">
+                                <td colspan="8" class="px-5 py-14 text-center">
                                     <p class="text-sm font-semibold text-slate-800">Aucun stage trouvé</p>
                                     <p class="mt-1 text-sm text-slate-500">Aucun stage ne correspond à la recherche ou aux
                                         filtres actuels.</p>

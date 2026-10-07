@@ -55,10 +55,17 @@ Route::get('/admin/dashboard', AdminDashboardController::class)
     ->name('admin.dashboard');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('dashboard/statistics', [AdminDashboardController::class, 'liveStatistics'])->name('dashboard.statistics');
     Route::get('applications', [AdminInternshipApplicationController::class, 'index'])->name('applications.index');
     Route::patch('applications/{application}/status', [AdminInternshipApplicationController::class, 'updateStatus'])->name('applications.updateStatus');
     Route::get('internships', [AdminInternshipController::class, 'index'])->name('internships.index');
     Route::get('internships/{internship}', [AdminInternshipController::class, 'show'])->name('internships.show');
+    Route::patch('internships/{studentInternship}/observation', [AdminInternshipController::class, 'updateObservation'])
+        ->whereNumber('studentInternship')
+        ->name('internships.observation.update');
+    Route::patch('internships/{studentInternship}/dates', [AdminInternshipController::class, 'updateDates'])
+        ->whereNumber('studentInternship')
+        ->name('internships.dates.update');
     Route::resource('companies', AdminCompanyController::class);
     Route::resource('users', AdminUserController::class)->except(['show']);
     Route::resource('offers', AdminInternshipOfferController::class)->except(['show']);
